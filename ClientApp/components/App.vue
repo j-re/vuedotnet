@@ -6,11 +6,17 @@
     <ul>
       <li v-for="user in users" :key="user.userName">{{ user.fullName }} - {{ user.userName }}</li>
     </ul>
+    <product-list />
   </div>
 </template>
 <script>
+import ProductList from "./products/List.vue"
 export default {
   name: "app",
+  components:{
+    //ProductList: ProductList
+    ProductList //es6 support for keyvalues of the samename
+  },
   data() {
     return {
       time: new Date().toString(),
