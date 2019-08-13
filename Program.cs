@@ -22,8 +22,7 @@ namespace vue
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var dbContext =
-                services.GetRequiredService<VueContext>();
+                var dbContext = services.GetRequiredService<VueContext>();
                 dbContext.Database.Migrate();
                 dbContext.EnsureSeeded();
             }

@@ -1,2 +1,2 @@
 # Current Book Location:
-Page 117 (Client side routing)
+Page 115 (Building a product Catalog)
