@@ -25,6 +25,7 @@ namespace vue
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -34,6 +35,12 @@ namespace vue
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<VueContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder.AllowAnyOrigin());
+            });
 
             services.AddMvc();
             services.Configure<RazorViewEngineOptions>(options =>
@@ -61,8 +68,20 @@ namespace vue
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                    ctx.Context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                }
+            });
 
+            //app.UseCors(builder => builder.AllowAnyOrigin());
+
+            //options.AddPolicy("AllowOrigin",
+            //builder.WithOrigins("http://placehold.it", "http://localhost:52505")
+            //) ;
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
