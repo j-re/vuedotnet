@@ -1,7 +1,6 @@
-using ECommerce.Data.Entities;
+using vue.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using vue.Data.Entities;
 
 namespace vue.Data
 {

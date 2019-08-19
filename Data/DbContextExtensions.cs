@@ -1,8 +1,7 @@
-using ECommerce.Data.Entities;
+using vue.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
-using vue.Data.Entities;
 
 namespace vue.Data
 {

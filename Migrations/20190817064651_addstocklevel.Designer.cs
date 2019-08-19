@@ -21,7 +21,7 @@ namespace vue.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Brand", b =>
+            modelBuilder.Entity("vue.Data.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -34,7 +34,7 @@ namespace vue.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Colour", b =>
+            modelBuilder.Entity("vue.Data.Entities.Colour", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -47,7 +47,7 @@ namespace vue.Migrations
                     b.ToTable("Colours");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Feature", b =>
+            modelBuilder.Entity("vue.Data.Entities.Feature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -60,7 +60,7 @@ namespace vue.Migrations
                     b.ToTable("Features");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Image", b =>
+            modelBuilder.Entity("vue.Data.Entities.Image", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -77,7 +77,7 @@ namespace vue.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.OS", b =>
+            modelBuilder.Entity("vue.Data.Entities.OS", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -90,7 +90,7 @@ namespace vue.Migrations
                     b.ToTable("OS");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Product", b =>
+            modelBuilder.Entity("vue.Data.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -132,7 +132,7 @@ namespace vue.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.ProductFeature", b =>
+            modelBuilder.Entity("vue.Data.Entities.ProductFeature", b =>
                 {
                     b.Property<int>("ProductId");
 
@@ -145,7 +145,7 @@ namespace vue.Migrations
                     b.ToTable("ProductFeatures");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.ProductVariant", b =>
+            modelBuilder.Entity("vue.Data.Entities.ProductVariant", b =>
                 {
                     b.Property<int>("ProductId");
 
@@ -166,7 +166,7 @@ namespace vue.Migrations
                     b.ToTable("ProductVariants");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Storage", b =>
+            modelBuilder.Entity("vue.Data.Entities.Storage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -336,53 +336,53 @@ namespace vue.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Image", b =>
+            modelBuilder.Entity("vue.Data.Entities.Image", b =>
                 {
-                    b.HasOne("ECommerce.Data.Entities.Product", "Product")
+                    b.HasOne("vue.Data.Entities.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.Product", b =>
+            modelBuilder.Entity("vue.Data.Entities.Product", b =>
                 {
-                    b.HasOne("ECommerce.Data.Entities.Brand", "Brand")
+                    b.HasOne("vue.Data.Entities.Brand", "Brand")
                         .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ECommerce.Data.Entities.OS", "OS")
+                    b.HasOne("vue.Data.Entities.OS", "OS")
                         .WithMany()
                         .HasForeignKey("OSId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.ProductFeature", b =>
+            modelBuilder.Entity("vue.Data.Entities.ProductFeature", b =>
                 {
-                    b.HasOne("ECommerce.Data.Entities.Feature", "Feature")
+                    b.HasOne("vue.Data.Entities.Feature", "Feature")
                         .WithMany("ProductFeatures")
                         .HasForeignKey("FeatureId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ECommerce.Data.Entities.Product", "Product")
+                    b.HasOne("vue.Data.Entities.Product", "Product")
                         .WithMany("ProductFeatures")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ECommerce.Data.Entities.ProductVariant", b =>
+            modelBuilder.Entity("vue.Data.Entities.ProductVariant", b =>
                 {
-                    b.HasOne("ECommerce.Data.Entities.Colour", "Colour")
+                    b.HasOne("vue.Data.Entities.Colour", "Colour")
                         .WithMany("ProductVariants")
                         .HasForeignKey("ColourId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ECommerce.Data.Entities.Product", "Product")
+                    b.HasOne("vue.Data.Entities.Product", "Product")
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ECommerce.Data.Entities.Storage", "Storage")
+                    b.HasOne("vue.Data.Entities.Storage", "Storage")
                         .WithMany("ProductVariants")
                         .HasForeignKey("StorageId")
                         .OnDelete(DeleteBehavior.Cascade);

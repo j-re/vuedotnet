@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.Data.Entities
+namespace vue.Data.Entities
 {
     public class ProductVariant
     {
