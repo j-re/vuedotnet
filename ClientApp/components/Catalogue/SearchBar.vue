@@ -28,6 +28,7 @@ export default {
   methods: {
     update(newVal) {
       this.value = newVal;
+        //this.search();
     },
     search: _.debounce(function() {
       let query = Object.assign({}, this.$route.query);
@@ -42,6 +43,7 @@ export default {
     }, 500)
   },
   watch: {
+    //Not really required, could just execute this on the update method.
     value(newValue) {
       this.search();
     }
