@@ -9,6 +9,7 @@ Vue.use(BoostrapVue);
 //import page components
 import Catalogue from "./pages/Catalogue.vue";
 import Product from "./pages/Product.vue";
+import store from "./store";
 
 const routes = [
     { path: "/products", component: Catalogue },
@@ -29,5 +30,6 @@ router.afterEach((to, from) => {
 new Vue({
     el: '#app-root',
     router: router,
+    store,
     render: h => h(require('./components/App.vue'))
 });

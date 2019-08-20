@@ -24,8 +24,20 @@
         <ul>
           <li v-for="feature in product.features" :key="feature">{{ feature }}</li>
         </ul>
-        <p class="mt-4 mb-4">£{{ product.price }}</p>
-        <b-button variant="primary">Add to cart</b-button>
+        <div v-if="variant">
+          <h5>Variants</h5>
+          <b-form-group label="Colour">
+            <b-form-select :options="product.colours" v-model="colour" />
+          </b-form-group>
+          <b-form-group label="Capacity">
+            <b-form-select :options="product.storage" v-model="capacity" />
+          </b-form-group>
+          <p class="mt-4 mb-4">
+            <b>Price:</b>
+            £{{ variant.price }}
+          </p>
+        </div>
+        <b-button variant="primary" @click="addProductToCart">Add to cart</b-button>
       </b-col>
     </b-row>
     <b-row>
@@ -48,11 +60,30 @@ export default {
   components: {
     Gallery
   },
+  props: {
+    product: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       open: false,
-      index: 0
+      index: 0,
+      colour: null,
+      capacity: null
     };
+  },
+  created() {
+    this.colour = this.product.colours[0].value;
+    this.capacity = this.product.storage[0].value;
+  },
+  computed: {
+    variant() {
+      return this.product.variants.find(
+        v => v.colourId == this.colour && v.storageId == this.capacity
+      );
+    }
   },
   methods: {
     back() {
@@ -61,12 +92,9 @@ export default {
     openGallery(index) {
       this.index = index;
       this.open = true;
-    }
-  },
-  props: {
-    product: {
-      type: Object,
-      required: true
+    },
+    addProductToCart() {
+      this.$store.dispatch("addProductToCart", this.variant);
     }
   }
 };

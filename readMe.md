@@ -1,5 +1,5 @@
 # Current Book Location:
-Page 211
+Page 229
 
 Read:
 https://dotnetcoretutorials.com/2019/04/30/the-mediator-pattern-in-net-core-part-1-whats-a-mediator/
