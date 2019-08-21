@@ -9,7 +9,6 @@
             <h2 class="mt-2" @click="view(product)">{{ product.name }}</h2>
             <p class="mt-4 mb-4">{{ product.shortDescription }}</p>
             <p class="mt-4 mb-4">Prices from  {{ product.price | currency }}</p>
-            <b-button variant="primary">Add to cart</b-button>
           </b-media>
         </b-col>
       </b-row>

@@ -44,7 +44,7 @@ export default {
       this.$store.dispatch("removeProductFromCart", this.item);
     },
     setProductQuantity(newVal) {
-      const payload = { product: this.item, quantity: parseInt(quantity) };
+      const payload = { product: this.item, quantity: parseInt(newVal) };
       this.$store.dispatch("setProductQuantity", payload);
     }
   }
