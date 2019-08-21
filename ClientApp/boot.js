@@ -9,11 +9,16 @@ Vue.use(BoostrapVue);
 //import page components
 import Catalogue from "./pages/Catalogue.vue";
 import Product from "./pages/Product.vue";
+import Cart from "./pages/Cart.vue";
 import store from "./store";
+import {currency} from "./filters"
+
+Vue.filter("currency", currency);
 
 const routes = [
     { path: "/products", component: Catalogue },
     { path: "/products/:slug", component: Product },
+    { path: "/cart", component: Cart },
     { path: "*", redirect: "/products" }
 ];
 

@@ -8,3 +8,13 @@ export const updateProductQuantity = (state, index) => {
     cartItem.quantity++;
     state.cart.splice(index, 1, cartItem);
 };
+
+export const removeProductFromCart = (state, index) => {
+    state.cart.splice(index, 1);
+};
+
+export const setProductQuantity = (state, payload) => {
+    let cartItem = Object.assign({}, state.cart[payload.index]);
+    cartItem.quantity = payload.quantity;
+    state.cart.splice(payload.index, 1, cartItem);
+};
