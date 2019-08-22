@@ -8,7 +8,18 @@ namespace vue.Data
     public static class DbContextExtensions
     {
         public static UserManager<AppUser> UserManager { get; set; }
+        public static RoleManager<AppRole> RoleManager { get; set; }
+
         public static void EnsureSeeded(this VueContext context)
+        {
+            AddRoles(context);
+            AddUsers(context);
+            AddColoursFeaturesAndStorage(context);
+            AddOperatingSystemsAndBrands(context);
+            AddProducts(context);
+        }
+
+        private static void AddUsers(VueContext context)
         {
             if (UserManager.FindByEmailAsync("stu@ratcliffe.io").GetAwaiter().GetResult() == null)
             {
@@ -23,9 +34,25 @@ namespace vue.Data
                 };
                 UserManager.CreateAsync(user, "Password1*").GetAwaiter().GetResult();
             }
-            AddColoursFeaturesAndStorage(context);
-            AddOperatingSystemsAndBrands(context);
-            AddProducts(context);
+
+            var admin = UserManager.FindByEmailAsync("stu@ratcliffe.io").GetAwaiter().GetResult();
+
+            if (UserManager.IsInRoleAsync(admin, "Admin").GetAwaiter().GetResult() == false)
+            {
+                UserManager.AddToRoleAsync(admin, "Admin");
+            }
+        }
+
+        private static void AddRoles(VueContext context)
+        {
+            if (RoleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult() == false)
+            {
+                RoleManager.CreateAsync(new AppRole("Admin")).GetAwaiter().GetResult();
+            }
+            if (RoleManager.RoleExistsAsync("Customer").GetAwaiter().GetResult() == false)
+            {
+                RoleManager.CreateAsync(new AppRole("Customer")).GetAwaiter().GetResult();
+            }
         }
 
         private static void AddColoursFeaturesAndStorage(VueContext context)

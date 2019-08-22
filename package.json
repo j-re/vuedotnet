@@ -35,6 +35,7 @@
   },
   "scripts": {
     "webpackmain": "webpack --config webpack.config.js && webpack",
-    "webpack": "webpack --config webpack.config.vendor.js && webpack"
+    "webpack": "webpack --config webpack.config.vendor.js && webpack",
+    "runweb": "dotnet run"
   }
 }

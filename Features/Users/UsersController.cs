@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vue.Data;
 
 namespace vue.Features.Users
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {

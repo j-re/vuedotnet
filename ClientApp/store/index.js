@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
 
 import * as actions from "./actions";
 import * as mutations from "./mutations";
@@ -14,6 +15,9 @@ const store = new Vuex.Store({
     mutations,
     getters,
     state: {
+        auth: null,
+        showAuthModal: false,
+        loading: false,
         cart: []
     }
 });
