@@ -8,6 +8,9 @@
           <b-navbar-nav>
             <b-nav-item to="/products">Products</b-nav-item>
           </b-navbar-nav>
+          <b-navbar-nav class="ml-auto mr-4">
+            <cart-summary />
+          </b-navbar-nav>
         </b-collapse>
       </b-container>
     </b-navbar>
@@ -18,8 +21,16 @@
 </template>
 
 <script>
+import CartSummary from "./Cart/CartSummary.vue";
+
 export default {
-  name: "app"
+  name: "app",
+  components: {
+    CartSummary
+  },
+  beforeCreate(){
+    this.$store.commit("initialise");
+  }
 };
 </script>
 
@@ -40,5 +51,8 @@ div.page {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+.toast{
+  opacity:1;
 }
 </style>
