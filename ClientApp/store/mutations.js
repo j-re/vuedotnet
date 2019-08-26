@@ -20,11 +20,8 @@ export const setProductQuantity = (state, payload) => {
 };
 
 
-export const initialise = state => {
-    const store = localStorage.getItem("store");
-    if (store) {
-        Object.assign(state, JSON.parse(store));
-    }
+export const initialise = (state, payload) => {
+        Object.assign(state, payload);
 };
 
 
