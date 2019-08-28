@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using vue.Data;
 using vue.Data.Entities;
 using vue.Infrastructure;
+using Stripe;
 
 namespace vue
 {
@@ -122,6 +123,8 @@ namespace vue
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            StripeConfiguration.ApiKey = "sk_test_RuEjSoy2gjFq6hEa68BoTfKf00XBLGKbPP";
         }
     }
 }
