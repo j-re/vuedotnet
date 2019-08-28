@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace vue.Data.Entities
 {
@@ -13,5 +14,7 @@ namespace vue.Data.Entities
         {
             get { return $"{FirstName} {LastName}"; }
         }
+
+        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }
