@@ -75,6 +75,17 @@ namespace vue
                 options.ViewLocationExpanders.Add(new FeatureLocationExpander());
             });
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Password settings.
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 1;
+            });
+
 
             var provider = services.BuildServiceProvider();
             DbContextExtensions.UserManager = provider.GetService<UserManager<AppUser>>();

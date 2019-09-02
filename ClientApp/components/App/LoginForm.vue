@@ -1,10 +1,10 @@
 ﻿<template>
     <form @submit.prevent="login" class="p-2">
-        <b-alert variant="danger" :show="error !== null" dismissible
+        <b-alert variant="danger" :show="regErrors !== null" dismissible
                  @dismissed="error = null">
-            {{ error }}
+            {{ regErrors }}
         </b-alert>
-        <b-alert variant="success" :show="registered && error === null">
+        <b-alert variant="success" :show="registered && regErrors === null">
             Registration successful. Please login to continue.
         </b-alert>
         <p>Login with your e-mail address and password.</p>
@@ -36,7 +36,7 @@
             return {
                 email: "",
                 password: "",
-                error: null
+                regErrors: null
             };
         },
         computed: {
@@ -53,7 +53,7 @@
                 this.$store
                     .dispatch("login", payload)
                     .then(response => {
-                        this.error = null;
+                        this.regErrors = null;
                         this.email = "";
                         this.password = "";
                         if (this.$route.query.redirect) {
@@ -61,7 +61,7 @@
                         }
                     })
                     .catch(error => {
-                        this.error = error.data;
+                        this.regErrors = error.data;
                     });
             },
             close() {

@@ -45,7 +45,7 @@ export const login = ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
         commit("loginRequest");
         axios
-            .post("/api/token", payload)
+            .post("/api/token/gettoken", payload)
             .then(response => {
                 const auth = response.data;
                 axios.defaults.headers.common["Authorization"] = `Bearer ${
