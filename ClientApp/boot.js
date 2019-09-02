@@ -21,7 +21,7 @@ import Cart from "./pages/Cart.vue";
 import store from "./store";
 import Checkout from "./pages/Checkout.vue";
 import Account from "./pages/Account.vue";
-import { currency, date } from "./filters"
+import { currency, date } from "./filters";
 
 Vue.filter("date", date);
 Vue.filter("currency", currency);
