@@ -69,7 +69,14 @@ export const register = ({ commit }, payload) => {
         axios
             .post("/api/account", payload)
             .then(response => {
+                
+                const auth = response.data;
+                axios.defaults.headers.common["Authorization"] = `Bearer ${
+                    auth.access_token
+                    }`;
                 commit("registerSuccess");
+                commit("loginSuccess", auth);
+                commit("hideAuthModal");
                 resolve(response);
             })
             .catch(error => {

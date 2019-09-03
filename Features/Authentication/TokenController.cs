@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using vue.Data.Entities;
+using vue.Infrastructure;
 
 namespace vue.Features.Authentication
 {
@@ -20,13 +21,13 @@ namespace vue.Features.Authentication
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IConfiguration _configuration;
-        public TokenController(SignInManager<AppUser> signInManager,
-        UserManager<AppUser> userManager, IConfiguration configuration)
+        private readonly ITokenGenerator _tokenGenerator;
+
+        public TokenController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ITokenGenerator tokenGenerator)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _configuration = configuration;
+            _tokenGenerator = tokenGenerator;
         }
 
         [HttpPost]
@@ -48,7 +49,7 @@ namespace vue.Features.Authentication
             if (!result.Succeeded)
                 return BadRequest(errorMessage);
 
-            var token = await GenerateToken(user);
+            var token = await _tokenGenerator.GenerateToken(user);
 
             return Ok(token);
         }
@@ -73,41 +74,7 @@ namespace vue.Features.Authentication
             return Ok();
         }
 
-        private async Task<TokenViewModel> GenerateToken(AppUser user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
-            };
-
-            var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:JwtKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["Authentication:JwtExpireDays"]));
-            var token = new JwtSecurityToken(
-                _configuration["Authentication:JwtIssuer"],
-                _configuration["Authentication:JwtAudience"],
-                claims,
-                expires: expires,
-                signingCredentials: creds
-            );
-
-            return new TokenViewModel
-            {
-                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-                AccessTokenExpiration = expires,
-                FirstName = user.FirstName,
-                LastName = user.LastName
-            };
-        }
+        
     }
 
     public class TokenViewModel

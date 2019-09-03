@@ -63,7 +63,8 @@
                         this.email = "";
                         this.password = "";
                         this.confirmPassword = "";
-                        this.$emit("success");
+                        this.$toastr("success", "You have been successfully registered.");
+                        this.$emit("close");
                     })
                     .catch(error => {
                         if (typeof error.data === "string" || error.data

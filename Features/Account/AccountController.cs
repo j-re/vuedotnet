@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using vue.Data.Entities;
+using vue.Infrastructure;
 
 namespace vue.Features.Account
 {
@@ -13,9 +14,14 @@ namespace vue.Features.Account
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
-        public AccountController(UserManager<AppUser> userManager)
+        private readonly SignInManager<AppUser> _signInManager;
+
+        private readonly ITokenGenerator _tokenGenerator;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,ITokenGenerator tokenGenerator)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
+            _tokenGenerator = tokenGenerator;
         }
 
         [HttpPost]
@@ -44,7 +50,11 @@ namespace vue.Features.Account
 
             await _userManager.AddToRoleAsync(user, "Customer");
 
-            return Ok();
+            await _signInManager.SignInAsync(user,true);
+
+             var token = await _tokenGenerator.GenerateToken(user);
+
+            return Ok(token);
         }
     }
 

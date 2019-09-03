@@ -75,6 +75,8 @@ namespace vue
                 options.ViewLocationExpanders.Add(new FeatureLocationExpander());
             });
 
+            services.AddTransient<ITokenGenerator, TokenGenerator>();
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Password settings.

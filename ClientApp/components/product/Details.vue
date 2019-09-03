@@ -93,9 +93,7 @@ export default {
       this.index = index;
       this.open = true;
     },
-    addProductToCart() {
-      this.$toastr('success', 'i am a toastr success', 'hello')
-      
+    addProductToCart() {      
       this.$store.dispatch("addProductToCart", this.variant);
       this.$toastr("success", "Product added to cart successfully.");
     }
