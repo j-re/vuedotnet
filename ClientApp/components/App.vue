@@ -9,7 +9,7 @@
                         <b-nav-item to="/products">Products</b-nav-item>
                     </b-navbar-nav>
                     <b-navbar-nav class="ml-auto mr-4">
-                        <cart-summary />
+                        <cart-summary v-if="isCustomer" />
                         <auth-nav-item />
                     </b-navbar-nav>
                 </b-collapse>
@@ -37,6 +37,9 @@
         computed: {
             showAuthModal() {
                 return this.$store.state.showAuthModal;
+            },
+            isCustomer() {
+                return (this.$store.getters.isInRole("Customer") || !this.$store.getters.isAuthenticated);
             }
         }
     };

@@ -23,6 +23,12 @@ import Checkout from "./pages/Checkout.vue";
 import Account from "./pages/Account.vue";
 import { currency, date } from "./filters";
 
+//import admin pages
+import AdminIndex from "./pages/admin/Index.vue";
+import AdminOrders from "./pages/admin/Orders.vue";
+import AdminProducts from "./pages/admin/Products.vue";
+import AdminCreateProduct from "./pages/admin/CreateProduct.vue";
+
 Vue.filter("date", date);
 Vue.filter("currency", currency);
 
@@ -47,21 +53,44 @@ const routes = [{
 },
 {
     path: "/cart",
-    component: Cart
+    component: Cart,
+    meta: { role: "Customer" }
 },
 {
     path: "/checkout",
     component: Checkout,
     meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        role: "Customer"
     }
 },
 {
     path: "/account",
     component: Account,
     meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        role: "Customer"
     }
+},
+{
+    path: "/admin",
+    component: AdminIndex,
+    meta: { requiresAuth: true, role: "Admin" },
+    redirect: "/admin/orders",
+    children: [
+        {
+            path: "orders",
+            component: AdminOrders
+        },
+        {
+            path: "products",
+            component: AdminProducts
+        },
+        {
+            path: "products/create",
+            component: AdminCreateProduct
+        }
+    ]
 },
 {
     path: "*",
@@ -76,6 +105,9 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+    //Because the path: "/" redirects to "/products" vue does not make any changes if the user is already on this page.
+    //As a result the nprogress bar will never stop running.
+    //Somewhere we would need to check and disable the nprogress
     NProgress.start();
     if (to.matched.some(route => route.meta.requiresAuth)) {
         if (!store.getters.isAuthenticated) {
@@ -87,10 +119,23 @@ router.beforeEach((to, from, next) => {
                 }
             });
         } else {
-            next();
+            if (to.matched.some(route => route.meta.role && store.getters.isInRole(route.meta.role))) {
+                next();
+            } else if (!to.matched.some(route => route.meta.role)) {
+                next();
+            } else {
+                next({ path: "/" });
+            }
         }
     } else {
-        next();
+        if (to.matched.some(route => route.meta.role && !(store.getters.isAuthenticated || store.getters.isInRole(route.meta.role)))) {
+            next();
+        } else {
+            if (to.matched.some(route => route.meta.role)) {
+                next({ path: "/" });
+            }
+            next();
+        }
     }
 });
 

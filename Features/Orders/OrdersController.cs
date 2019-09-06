@@ -26,7 +26,7 @@ namespace vue.Features.Orders
             _db = db;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Customer")]
         public async Task<IActionResult> Create([FromBody] CreateOrderViewModel model)
         {
             if (!ModelState.IsValid)

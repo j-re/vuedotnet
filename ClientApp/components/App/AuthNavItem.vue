@@ -4,7 +4,7 @@
             <i class="fas fa-user"></i>
             {{ fullName }}
         </template>
-        <b-dropdown-item to="/account">
+        <b-dropdown-item to="/account" v-if="isCustomer">
             <i class="fas fa-user"></i>
             My Account
         </b-dropdown-item>
@@ -30,6 +30,9 @@
                 return `${this.$store.state.auth.firstName} ${
                     this.$store.state.auth.lastName
                     }`;
+            },
+            isCustomer() {
+                return this.$store.getters.isInRole("Customer");
             }
         },
         methods: {

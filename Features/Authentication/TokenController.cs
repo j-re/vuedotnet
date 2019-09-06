@@ -85,6 +85,8 @@ namespace vue.Features.Authentication
         public DateTime AccessTokenExpiration { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public IEnumerable<string> Roles { get; set; }
     }
 
     public class LoginViewModel
