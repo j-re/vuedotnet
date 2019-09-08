@@ -8,6 +8,9 @@
                     <b-navbar-nav>
                         <b-nav-item to="/products">Products</b-nav-item>
                     </b-navbar-nav>
+                    <b-navbar-nav v-if="isAdmin">
+                        <b-nav-item to="/admin">Admin</b-nav-item>
+                    </b-navbar-nav>
                     <b-navbar-nav class="ml-auto mr-4">
                         <cart-summary v-if="isCustomer" />
                         <auth-nav-item />
@@ -40,6 +43,9 @@
             },
             isCustomer() {
                 return (this.$store.getters.isInRole("Customer") || !this.$store.getters.isAuthenticated);
+            },
+            isAdmin() {
+                return (this.$store.getters.isInRole("Admin"));
             }
         }
     };

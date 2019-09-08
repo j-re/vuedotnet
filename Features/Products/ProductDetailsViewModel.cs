@@ -15,8 +15,8 @@ namespace vue.Features.Products
         public IEnumerable<string> Features { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-        public IEnumerable<SelectListItem> Colours { get; set; }
-        public IEnumerable<SelectListItem> Storage { get; set; }
+       // public IEnumerable<SelectListItem> Colours { get; set; }
+        //public IEnumerable<SelectListItem> Storage { get; set; }
         public IEnumerable<ProductVariantViewModel> Variants { get; set; }
     }
 

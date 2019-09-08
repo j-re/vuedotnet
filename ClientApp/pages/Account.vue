@@ -7,7 +7,7 @@
 
 <script>
 import axios from "axios";
-import OrderList from "../components/account/OrderList.vue";
+import OrderList from "../components/shared/OrderList.vue";
 export default {
   name: "account",
   components: {

@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vue.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using Microsoft.AspNetCore.Authorization;
+using vue.Data.Entities;
+using vue.Infrastructure;
 
 namespace vue.Features.Products
 {
@@ -84,7 +86,7 @@ namespace vue.Features.Products
                 Thumbnail = x.Thumbnail,
                 Images = x.Images.Select(i => i.Url),
                 Features = x.ProductFeatures.Select(f => f.Feature.Name),
-                Colours = x.ProductVariants.Select(v => new SelectListItem
+                /*Colours = x.ProductVariants.Select(v => new SelectListItem
                 {
                     Value = v.ColourId.ToString(),
                     Text = v.Colour.Name
@@ -93,8 +95,10 @@ namespace vue.Features.Products
                 {
                     Value = v.StorageId.ToString(),
                     Text = v.Storage.Capacity.ToString() + "GB"
-                }).Distinct(),
-                Variants = x.ProductVariants.Select(v => new ProductVariantViewModel
+                }).Distinct(),*/
+                Variants = x.ProductVariants.OrderBy(v=> v.Colour.Name)
+                .ThenBy(v=>v.Storage.Capacity)
+                .Select(v => new ProductVariantViewModel
                 {
                     ProductId = x.Id,
                     Name = x.Name,
@@ -110,6 +114,77 @@ namespace vue.Features.Products
             if (product == null)
                 return NotFound();
             return Ok(product);
+        }
+
+        [HttpPost, Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([FromBody] CreateProductViewModel model)
+        {
+            var brand = await _db.Brands.FirstOrDefaultAsync(x => x.Name == model.Brand);
+            if (brand == null)
+                brand = new Brand { Name = model.Brand };
+
+            var os = await _db.OS.FirstOrDefaultAsync(x => x.Name == model.OS);
+            if (os == null)
+                os = new OS { Name = model.OS };
+
+            var product = new Product
+            {
+                Name = model.Name,
+                Slug = model.Name.GenerateSlug(),
+                ShortDescription = model.ShortDescription,
+                Description = model.Description,
+                TalkTime = model.TalkTime,
+                StandbyTime = model.StandbyTime,
+                ScreenSize = model.ScreenSize,
+                Brand = brand,
+                OS = os,
+                Thumbnail = "/assets/images/thumbnail.jpeg",
+                Images = new List<Image>
+                    {
+                        new Image { Url = "/assets/images/gallery1.jpeg" },
+                        new Image { Url = "/assets/images/gallery2.jpeg" },
+                        new Image { Url = "/assets/images/gallery3.jpeg" },
+                        new Image { Url = "/assets/images/gallery4.jpeg" },
+                        new Image { Url = "/assets/images/gallery5.jpeg" },
+                        new Image { Url = "/assets/images/gallery6.jpeg" }
+                    }
+            };
+
+            foreach (var feature in model.Features)
+            {
+                var feat = await _db.Features.SingleAsync(x => x.Name == feature);
+                product.ProductFeatures.Add(new ProductFeature { Feature = feat });
+            }
+
+            foreach (var variant in model.Variants)
+            {
+                var colour = await _db.Colours.FirstOrDefaultAsync(x => x.Name == variant.Colour);
+                if (colour == null)
+                    colour = new Colour { Name = variant.Colour };
+                var capacity = Convert.ToInt32(variant.Storage.Substring(0, variant.Storage.IndexOf("GB")));
+                var storage = await _db.Storage.FirstOrDefaultAsync(x => x.Capacity == capacity);
+                if (storage == null)
+                    storage = new Storage { Capacity = capacity };
+                product.ProductVariants.Add(new ProductVariant
+                {
+                    Colour = colour,
+                    Storage = storage,
+                    Price = variant.Price
+                });
+            }
+
+            _db.Products.Add(product);
+
+            await _db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost("validate"), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Validate([FromBody] ValidateProductViewModel model)
+        {
+            var valid = await _db.Products.AllAsync(x => x.Name.ToLower() != model.Name.ToLower());
+            return Ok(valid);
         }
     }
 }
