@@ -30,50 +30,12 @@ export default {
     ProductSort,
     ProductList
   },
-  data() {
-    return {
-      products: [],
-      filters: {
-        brands: [],
-        capacity: [],
-        colours: [],
-        os: [],
-        features: []
-      }
-    };
-  },
   computed: {
-    sort() {
-      return this.$route.query.sort || 0;
+    filters() {
+      return this.$store.state.filters;
     },
     sortedProducts() {
-      switch (this.sort) {
-        case 1:
-          return this.products.sort((a, b) => {
-            return b.price > a.price;
-          });
-          break;
-        case 2:
-          return this.products.sort((a, b) => {
-            return a.name > b.name;
-          });
-          break;
-        case 3:
-          return this.products.sort((a, b) => {
-            return b.name > a.name;
-          });
-          break;
-        default:
-          return this.products.sort((a, b) => {
-            return a.price > b.price;
-          });
-      }
-    }
-  },
-  methods: {
-    setData(products, filters) {
-      this.products = products;
-      this.filters = filters;
+      return this.$store.getters.sortedProducts;
     }
   },
   beforeRouteEnter(to, from, next) {

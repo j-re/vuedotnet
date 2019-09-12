@@ -56,3 +56,17 @@ export const registerError = state => {
 export const logout = state => {
     state.auth = null;
 };
+
+
+export const setProducts = (state, products) => {
+    state.products = products;
+};
+export const setFilters = (state, filters) => {
+    state.filters = filters;
+};
+export const setProduct = (state, product) => {
+    state.product = product;
+};
+export const setOrders = (state, orders) => {
+    state.orders = orders;
+};

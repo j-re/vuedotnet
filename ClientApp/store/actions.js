@@ -90,3 +90,27 @@ export const logout = ({ commit }) => {
     commit("logout");
     delete axios.defaults.headers.common["Authorization"];
 };
+
+export const fetchProducts = ({ commit }, query) => {
+    return axios.get("/api/products", { params: query }).then(response => {
+        commit("setProducts", response.data);
+    });
+};
+
+export const fetchFilters = ({ commit }) => {
+    return axios.get("/api/filters").then(response => {
+        commit("setFilters", response.data);
+    });
+};
+
+export const fetchProduct = ({ commit }, slug) => {
+    return axios.get(`/api/products/${slug}`).then(response => {
+        commit("setProduct", response.data);
+    });
+};
+
+export const fetchOrders = ({ commit }) => {
+    return axios.get("/api/orders").then(response => {
+        commit("setOrders", response.data);
+    });
+};
