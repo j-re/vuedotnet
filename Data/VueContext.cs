@@ -37,6 +37,11 @@ namespace vue.Data
                 .HasKey(x => new { x.ProductId, x.ColourId, x.StorageId });
 
             modelBuilder.Entity<Order>().OwnsOne(x => x.DeliveryAddress);
+            modelBuilder.Entity<Order>().OwnsOne(x => x.DeliveryAddress);
+
+            modelBuilder.Entity<AppUser>()
+                .HasIndex(x => x.RefreshToken)
+                .IsUnique();
         }
     }
 }

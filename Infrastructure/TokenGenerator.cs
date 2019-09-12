@@ -34,6 +34,11 @@ namespace vue.Infrastructure
 
         public async Task<TokenViewModel> GenerateToken(AppUser user)
         {
+            var refreshToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+
+            user.RefreshToken = refreshToken;
+            await _userManager.UpdateAsync(user);
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -50,7 +55,7 @@ namespace vue.Infrastructure
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:JwtKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["Authentication:JwtExpireDays"]));
+            var expires = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Authentication:JwtExpireMins"]));
             var token = new JwtSecurityToken(
                 _configuration["Authentication:JwtIssuer"],
                 _configuration["Authentication:JwtAudience"],
@@ -62,7 +67,8 @@ namespace vue.Infrastructure
             return new TokenViewModel
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-                AccessTokenExpiration = expires,
+                //AccessTokenExpiration = expires,
+                RefreshToken = refreshToken,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Roles = roles

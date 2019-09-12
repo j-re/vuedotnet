@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using vue.Data;
 using vue.Data.Entities;
 using vue.Infrastructure;
 
@@ -22,12 +24,14 @@ namespace vue.Features.Authentication
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenGenerator _tokenGenerator;
+        private readonly VueContext _db;
 
-        public TokenController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ITokenGenerator tokenGenerator)
+        public TokenController(VueContext db, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, ITokenGenerator tokenGenerator)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
+            _db = db;
         }
 
         [HttpPost]
@@ -74,17 +78,47 @@ namespace vue.Features.Authentication
             return Ok();
         }
 
-        
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refreshtoken([FromBody] RefreshTokenViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var user = await _db.Users.SingleOrDefaultAsync(x => x.RefreshToken == model.RefreshToken);
+
+            if (user == null)
+                return BadRequest();
+
+            var token = await _tokenGenerator.GenerateToken(user);
+
+            return Ok(token);
+        }
+
+
+    }
+
+    public class RefreshTokenViewModel
+    {
+        [Required, JsonProperty("refresh_token")]
+        public string RefreshToken { get; set; }
     }
 
     public class TokenViewModel
     {
         [JsonProperty("access_token")]
         public string AccessToken { get; set; }
-        [JsonProperty("access_token_expiration")]
-        public DateTime AccessTokenExpiration { get; set; }
+
+        //[JsonProperty("access_token_expiration")]
+        //public DateTime AccessTokenExpiration { get; set; }
+
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
+
+        [JsonProperty("refresh_token")]
+        public string RefreshToken { get; set; }
 
         public IEnumerable<string> Roles { get; set; }
     }
